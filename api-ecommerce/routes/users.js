@@ -1,9 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const UserService = require('../services/UserService');
+const express = require('express');
+const userRouter = express.Router();
+module.exports = userRouter;
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+userRouter.param('userId', (req, res, next, id) => {
 
-module.exports = router;
+})
+
+//Create new User
+userRouter.post('/', (req, res, next) => {
+  req.body.username = req.body.username.toLowerCase();
+  const userService = new UserService();
+  const newUser = userService.createUser(req.body);
+
+  if(newUser){
+    return res.status(200).send('user created!');
+  }
+  return res.status(500).send('Problem creating user!');
+})
