@@ -55,7 +55,7 @@ userRouter.delete('/:userId', async (req, res, next) => {
   const userService = req.body.userService;
   const deleteUser = await userService.deleteUser(req.body.user.id);
   if(deleteUser){
-    return res.status(200).send("user successfully deleted")
+    return res.status(200).send("User successfully deleted")
   }
-  return res.status(500).send('unable to delete user')
+  return res.status(500).send('Unable to delete user')
 })
