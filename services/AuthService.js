@@ -1,6 +1,7 @@
 const UserModel = require( '../models/users');
 const UserService = require('./UserService');
 const crypto = require('crypto');
+
 class AuthService {
 
     generateHash(password){
@@ -14,10 +15,10 @@ class AuthService {
         };
     }
 
-    async getUserHash(username, password){
-        const user = UserService.getUser(username);
-        const hasher = crypto.createHMAC('sha256', process.env.HASH_SECRET);
-        const hash = hasher.update(`${password}${user.salt}`).digest('hex');
+    async getUserHash(password, salt){
+    
+        const hasher = crypto.createHmac('sha256', process.env.HASH_SECRET);
+        const hash = hasher.update(`${password}${salt}`).digest('hex');
 
         return {
             hash: hash
