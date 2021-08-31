@@ -39,7 +39,6 @@ userRouter.get('/', async (req, res, next) => {
 })
 
 userRouter.get('/:userId', async (req, res, next) => {
-  console.log(req.body.user);
   res.status(200).send(req.body.user);
 })
 

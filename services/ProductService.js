@@ -3,19 +3,22 @@ const ProductModel = require('../models').Products;
 class ProductService {
 
     async createProduct(product){
+        console.log(product)
         const {name, description, price, stock} = product;
+        console.log(name, description, price, stock)
         const newProduct = await ProductModel.create({
             name: name,
             description: description,
             price: price,
             stock: stock
         });
+
         return newProduct.id;
     }
 
     async getAllProducts(){
         const products = await ProductModel.findAll({
-            attributes: ['name', 'description', 'price', 'stock']
+           
         });
         return JSON.stringify(products);
     }
@@ -24,18 +27,21 @@ class ProductService {
         const product = await ProductModel.findAll({
             attributes: ['name', 'description', 'price', 'stock'],
             where: {
-                id: id
+                id: parseInt(id)
             }
         });
         return JSON.stringify(product);
     }
 
-    async updateProduct(product){
-        const updatedProduct = await ProdctModel.updateProduct({name:product.name, description: product.description, price: product.price, stock: product.stock}, {
+    async updateProduct(id, product){
+        console.log(id, product)
+        const {name, description, price, stock} = product
+        const updatedProduct = await ProductModel.update({name:name, description: description, price:price, stock: stock}, {
             where:{
-                id: product.id
+                id: id
             }
         });
+        console.log(updatedProduct)
         return updatedProduct;
     }
 
