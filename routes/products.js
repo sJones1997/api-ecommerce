@@ -28,7 +28,6 @@ productRouter.post('/', async (req, res, next) => {
     return res.status(500).send('Problem creating Product!');
 });
   
-
 productRouter.get('/', async (req, res, next) => {
     const productService = req.body.productService;
     const products = await productService.getAllProducts();
@@ -43,7 +42,6 @@ productRouter.get('/:productId', async (req, res, next) => {
 })
 
 productRouter.put('/:productId', async (req, res, next) => {
-  console.log(req.body)
     const updatedProduct = await req.body.productService.updateProduct(req.body.productId, req.body);
     if(updatedProduct) {
       return res.status(200).send('Details updated successfully');
