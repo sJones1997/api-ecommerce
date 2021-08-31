@@ -29,6 +29,16 @@ class ProductService {
         });
         return JSON.stringify(product);
     }
+
+    async updateProduct(product){
+        const updatedProduct = await ProdctModel.updateProduct({name:product.name, description: product.description, price: product.price, stock: product.stock}, {
+            where:{
+                id: product.id
+            }
+        });
+        return updatedProduct;
+    }
+
     async deleteProduct(id){
         const deleteProduct = await ProductModel.destroy({
             where: {
