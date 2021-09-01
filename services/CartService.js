@@ -1,5 +1,5 @@
 const CartModel = require('../models').Cart;
-
+const Models = require('../models');
 class CartService {
 
     async createCartItem(item){
@@ -10,7 +10,13 @@ class CartService {
     }
 
     async getAllCartItems(){
-
+        const allCartItems = CartModel.findAll({
+            include: [{
+                model: Models.Products, 
+                as: "product"
+            }]
+        })
+        return JSON.stringify(allCartItems);
     }
 
     async getCartItemById(){

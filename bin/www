@@ -19,6 +19,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
+
 var server = http.createServer(app);
 
 /**
@@ -28,6 +29,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.
@@ -48,6 +50,8 @@ function normalizePort(val) {
 
   return false;
 }
+
+console.log("----")
 
 /**
  * Event listener for HTTP server "error" event.
@@ -76,6 +80,7 @@ function onError(error) {
       throw error;
   }
 }
+
 
 /**
  * Event listener for HTTP server "listening" event.
