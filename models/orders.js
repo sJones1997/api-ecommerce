@@ -14,12 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       Orders.belongsTo(models.Users, {
         foreignKey: 'user_id',
         as: 'user'
-      })
+      });
       Orders.belongsToMany(models.Products, {
         through: 'Product_Orders',
         foreignKey: 'order_id',
         as: 'orders' 
-      })
+      });
     }
   };
   Orders.init({
