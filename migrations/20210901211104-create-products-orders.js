@@ -13,13 +13,13 @@ module.exports = {
         references: {
           model: 'Products',
           id: 'id'
-        }
+        }   
       },
       order_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Orders',
-          key: 'id'
+          id: 'id'
         }
       },
       createdAt: {

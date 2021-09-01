@@ -1,9 +1,9 @@
-const ProductCart = require('../models').Products_Cart;
+const ProductCartModel = require('../models').Products_Cart;
 
 class ProductsCartsService {
 
     async addCartItem(cartId, productId){
-        const addCartItem = await ProductCart.create({
+        const addCartItem = await ProductCartModel.create({
             cart_id: cartId, 
             product_id: productId
         });
@@ -11,7 +11,7 @@ class ProductsCartsService {
     }
 
     async getCartItem(cartItemId){
-        const getCartItem = await ProductCart.findAll({
+        const getCartItem = await ProductCartModel.findAll({
             where: {
                 id: cartItemId
             }
@@ -20,7 +20,7 @@ class ProductsCartsService {
     }
 
     async deleteCartItem(cartItemId){
-        const deleteCartItem = await ProductCart.destroy({
+        const deleteCartItem = await ProductCartModel.destroy({
             where: {
                 id: cartItemId
             }

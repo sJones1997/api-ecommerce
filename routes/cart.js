@@ -17,19 +17,6 @@ cartRouter.param('cartId', async (req, res, next, id) => {
     return res.status(404).send('Unable to find cart');
 });
 
-cartRouter.param('cartItemId', async (req, res, next, id) => {
-    console.log(id)
-    const productCartService = req.body.productCartService;
-    let cartItem = await productCartService.getCartItem(id);
-    cartItem = JSON.parse(cartItem);
-    if(cartItem.length){
-        req.body.cartItemId = parseInt(id);
-        req.body.cartItemStored = cartItem[0];
-        return next();
-    }
-    return res.status(404).send('Unable to find cart');
-});
-
 cartRouter.post('/', async(req, res, next) => {
     const cartService = req.body.cartService;
     const newCartId = await cartService.createCart(req.body.userId);
@@ -37,8 +24,7 @@ cartRouter.post('/', async(req, res, next) => {
         return res.status(200).send("cart created!");
     } 
     return res.status(404).send("Problem creating cart")
-})
-
+});
 
 cartRouter.get('/', async (req, res, next) => {
     const cartService = req.body.cartService;
@@ -47,11 +33,11 @@ cartRouter.get('/', async (req, res, next) => {
         return res.status(200).send(allCarts);
     }
     return res.status(404).send('No carts');
-})
+});
 
 cartRouter.get('/:cartId', (req, res, next) => {
     return res.status(200).send(req.body.cartStored);
-})
+});
 
 cartRouter.delete("/:cartId", async (req, res, next) => {
     const cartService = req.body.cartService;
@@ -59,8 +45,21 @@ cartRouter.delete("/:cartId", async (req, res, next) => {
     if(deleteCart){
         return res.status(200).send('Cart deleted');
     }
-    return res.status(500).send("Problem killing cart");
+    return res.status(500).send("Problem deleting cart");
 })
+
+
+cartRouter.param('cartItemId', async (req, res, next, id) => {
+    const productCartService = req.body.productCartService;
+    let cartItem = await productCartService.getCartItem(id);
+    cartItem = JSON.parse(cartItem);
+    if(cartItem.length){
+        req.body.cartItemId = parseInt(id);
+        req.body.cartItemStored = cartItem[0];
+        return next();
+    }
+    return res.status(404).send('Unable to find cart item');
+});
 
 
 cartRouter.post("/cartItem", async(req, res, next) => {
@@ -83,4 +82,4 @@ cartRouter.delete("/cartItem/:cartItemId", async (req, res, next) => {
         return res.status(200).send('Item deleted!');
     }
     return res.status(500).send("unable to delete cart item");
-})
+});

@@ -1,7 +1,7 @@
 const CartService = require('../services/CartService');
 const ProductsCartsService = require('../services/ProductCartService');
 
-const instantiateProducts = (req, res, next) => {
+const instantiateCarts = (req, res, next) => {
     const cartService = new CartService();
     const productCartService = new ProductsCartsService();
     req.body.cartService = cartService;
@@ -9,4 +9,4 @@ const instantiateProducts = (req, res, next) => {
     next();
 }
 
-module.exports = instantiateProducts;
+module.exports = instantiateCarts;
