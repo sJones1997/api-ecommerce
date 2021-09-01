@@ -1,44 +1,37 @@
 const CartModel = require('../models').Carts;
-const CartProduct = require('../models').Products_Cart;
-const Models = require('../models');
 class CartService {
 
     async createCart(userId){
-        console.log(userId)
-        const insertItem = CartModel.create({
+        const insertItem = await CartModel.create({
             user_id: userId
         });
         return insertItem.id;
     }
 
-    async addCartItem(cartId, productId){
-        const insertCartItem = CartProduct.create({
-            cart_id:cartId,
-            product_id: productId
+    async getAllCarts(){
+        const allCarts = await CartModel.findAll();
+        return JSON.stringify(allCarts);
+    }
+
+    async getCartById(cartId){
+        const cart = await CartModel.findAll({
+            where: {
+                id: cartId
+            }
         });
-        return insertCartItem.id;
+        return JSON.stringify(cart);
     }
 
-    async getAllCartItems(){
-        const allCartItems = CartModel.findAll();
-        return JSON.stringify(allCartItems);
+    async deleteCart(cartId){
+        const deleteCart = await CartModel.destroy({
+            where: {
+                id: cartId
+            }
+        });
+        return deleteCart;
     }
 
-    async getCartItemById(){
 
-    }
-
-    async updateCartItem(){
-
-    }
-
-    async deleteCart(){
-
-    }
-
-    async deleteCartItem(){
-
-    }
 
 }
 

@@ -4,7 +4,6 @@ class ProductService {
 
     async createProduct(product){
         const {name, description, price, stock} = product;
-        console.log(name, description, price, stock)
         const newProduct = await ProductModel.create({
             name: name,
             description: description,
@@ -16,7 +15,7 @@ class ProductService {
     }
 
     async getAllProducts(){
-        const products = await ProductModel.findAll({});
+        const products = await ProductModel.findAll();
         return JSON.stringify(products);
     }
 

@@ -22,7 +22,9 @@ module.exports = (sequelize, DataTypes) => {
 
     }
   };
-  Carts.init({}, {
+  Carts.init({
+    user_id: DataTypes.INTEGER    
+  }, {
     sequelize,
     modelName: 'Carts',
   });
