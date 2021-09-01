@@ -12,7 +12,7 @@ class CartService {
     }
 
     async addCartItem(cartId, productId){
-        const insertCartItem = Products_Cart.create({
+        const insertCartItem = CartProduct.create({
             cart_id:cartId,
             product_id: productId
         });

@@ -3,7 +3,6 @@ const ProductModel = require('../models').Products;
 class ProductService {
 
     async createProduct(product){
-        console.log(product)
         const {name, description, price, stock} = product;
         console.log(name, description, price, stock)
         const newProduct = await ProductModel.create({
@@ -17,9 +16,7 @@ class ProductService {
     }
 
     async getAllProducts(){
-        const products = await ProductModel.findAll({
-           
-        });
+        const products = await ProductModel.findAll({});
         return JSON.stringify(products);
     }
 

@@ -17,7 +17,7 @@ productRouter.param('productId', async (req, res, next, id) => {
     return res.status(404).send('Product not found');
 })
 
-//Create new User
+//Create new Product
 productRouter.post('/', async (req, res, next) => {
     req.body.name = req.body.name.toLowerCase();
     const productService = req.body.productService;
