@@ -18,6 +18,8 @@ userRouter.param('userId', async (req, res, next, id) => {
 
 //Create new User
 userRouter.post('/', async (req, res, next) => {
+  const decode = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString('utf-8');
+  console.log(decode)
   req.body.username = req.body.username.toLowerCase();
   const userService = req.body.userService;
   const newUser = await userService.createUser(req.body);
