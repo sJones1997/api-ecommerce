@@ -1,8 +1,11 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 const cors = require('cors');
 const corsMiddleware = require('./middlewares/cors');
 require('dotenv').config();
+const passportSetup = require('./passportStrategy/passport');
+
+
 
 app.use(cors(corsMiddleware));
 

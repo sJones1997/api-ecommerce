@@ -1,4 +1,3 @@
-const e = require("express");
 
 const corsOrigin = (req, callback) => {
     const allowedOrigins = ['http://localhost:3001', 'http://127.0.0.1:3001'];

@@ -4,6 +4,9 @@ const indexRouter = express.Router();
 const userRouter = require('./users');
 indexRouter.use('/users', userRouter);
 
+const authRouter = require('./auth');
+indexRouter.use('/auth', authRouter);
+
 const productRouter = require('./products');
 indexRouter.use('/products', productRouter);
 
