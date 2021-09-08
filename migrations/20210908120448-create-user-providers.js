@@ -23,7 +23,7 @@ module.exports = {
         }
       },
       provider_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.DECIMAL
       },
       createdAt: {
         allowNull: false,

@@ -3,7 +3,7 @@ const UserProviderModel = require('../models').user_providers;
 class UserProviderService {
 
     async createUserProvider(userProviderDetails){
-        const newUserProvider = await UserProviderModel.create({user_id: userProviderDetails.user_id, profile_provider_id: userProviderDetails.profile_provider_id, provider_id: userProviderDetails.provider_id});
+        const newUserProvider = await UserProviderModel.create({user_id: userProviderDetails.userId, profile_provider_id: userProviderDetails.profileProviderId, provider_id: userProviderDetails.providerId});
         return newUserProvider.id;
     }
 
@@ -26,3 +26,5 @@ class UserProviderService {
     }
 
 }
+
+module.exports = UserProviderService;

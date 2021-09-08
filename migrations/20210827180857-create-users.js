@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       local_account: {
-        type: Sequelize.SMALLINT 
+        type: Sequelize.INTEGER 
       },
       createdAt: {
         allowNull: false,
