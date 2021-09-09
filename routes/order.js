@@ -64,7 +64,6 @@ orderRouter.param('productOrderId', async (req, res, next, id) => {
 orderRouter.post("/productOrder", async(req, res, next) => {
     const productOrderService = req.body.productOrderService;
     const newProductOrder = await productOrderService.addProductOrder(req.body.orderId, req.body.productId);
-    console.log(newProductOrder)
     if(newProductOrder){
         return res.status(200).send("Item added!");
     }

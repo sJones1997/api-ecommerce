@@ -18,10 +18,10 @@ userRouter.param('userId', async (req, res, next, id) => {
 
 //Create new User
 userRouter.post('/', async (req, res, next) => {
-  req.body.username = req.body.username.toLowerCase();
+  let decode = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString('utf-8');
+  const detailsSplit = decode.split(":");
   const userService = req.body.userService;
-  const newUser = await userService.createUser(req.body);
-  console.log(newUser)
+  const newUser = await userService.createUser(detailsSplit);
   if(isNaN(newUser) === false){
     return res.status(200).send('User created!');
   }

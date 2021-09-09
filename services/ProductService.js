@@ -30,14 +30,12 @@ class ProductService {
     }
 
     async updateProduct(id, product){
-        console.log(id, product)
         const {name, description, price, stock} = product
         const updatedProduct = await ProductModel.update({name:name, description: description, price:price, stock: stock}, {
             where:{
                 id: id
             }
         });
-        console.log(updatedProduct)
         return updatedProduct;
     }
 

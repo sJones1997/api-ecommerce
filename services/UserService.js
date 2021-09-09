@@ -6,7 +6,7 @@ class UserService {
     async createUser(userDetails) {
         const auth = new AuthService();
         const {hash, salt} = auth.generateHash(userDetails.password);
-        const newUser = await UserModel.create({username: userDetails.username, password: hash, salt: salt});
+        const newUser = await UserModel.create({username: userDetails.username, password: hash, salt: salt, local_account: userDetails.local_account});   
         return newUser.id;        
     }
 

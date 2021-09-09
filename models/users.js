@@ -19,12 +19,17 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
         as: 'users'
       });
+      Users.hasOne(models.user_providers, {
+        foreignKey: 'user_id',
+        as: 'user_provider'
+      });
     }
   };
   Users.init({
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    salt: DataTypes.STRING
+    salt: DataTypes.STRING,
+    local_account: DataTypes.INTEGER    
   }, {
     sequelize,
     modelName: 'Users',
