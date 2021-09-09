@@ -10,9 +10,10 @@ class UserProviderService {
     async getUserProvider(userProviderId){
         const getUserProvider = await UserProviderModel.findAll({
             where: {
-                id: userProviderId
+                provider_id: userProviderId
             }
         });
+        console.log(getUserProvider)
         return JSON.stringify(getUserProvider);
     }
 
@@ -22,7 +23,7 @@ class UserProviderService {
                 id: userProviderId
             }
         });
-        return userProviderId;
+        return deleteUserProvider;
     }
 
 }

@@ -17,4 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 var indexRouter = require('./routes/index');
 app.use('/api', indexRouter);
 
+app.listen(process.env.PORT || 3001, function () {
+    console.log(`Listening on port ${process.env.PORT || 3001}`);
+});
+
 module.exports = app;
