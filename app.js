@@ -3,9 +3,7 @@ const app = express();
 const cors = require('cors');
 const corsMiddleware = require('./middlewares/cors');
 require('dotenv').config();
-const googleSetup = require('./passportStrategy/google');
-
-
+const googleSetup = require('./passport_strategy/google');
 
 app.use(cors(corsMiddleware));
 
