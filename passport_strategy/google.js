@@ -8,12 +8,14 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/api/auth/google/redirect"
     }, async (accessToken, refreshToken, profile, done) => {
-        const googleProfileId = profile.id;
-        const googleUsername = profile.displayName;
         const userService = new UserService();
-        const newUserId = await userService.createUser({username: googleUsername, password: null, local_account: 0});
         const userProviderService = new UserProviderService();
-        const result = await userProviderService.createUserProvider({userId: newUserId, profileProviderId: 1, providerId: googleProfileId});
-        console.log(result)
+        const googleUser = await userProviderService.getUserProvider(profile.id);
+        if(googleUser){
+            return googleUser.id
+        } else {
+            const newUserId = await userService.createUser({username: profile.displayName, password: null, local_account: 0});
+            const result = await userProviderService.createUserProvider({userId: newUserId, profileProviderId: 1, providerId: profile.id});
+        }
     })
 )

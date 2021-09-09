@@ -4,7 +4,6 @@ const UserModel = require('../models').Users;
 class UserService {
 
     async createUser(userDetails) {
-        console.log(userDetails);
         const auth = new AuthService();
         const {hash, salt} = auth.generateHash(userDetails.password);
         const newUser = await UserModel.create({username: userDetails.username, password: hash, salt: salt, local_account: userDetails.local_account});   

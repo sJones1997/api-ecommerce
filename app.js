@@ -3,9 +3,7 @@ const app = express();
 const cors = require('cors');
 const corsMiddleware = require('./middlewares/cors');
 require('dotenv').config();
-const googleSetup = require('./passportStrategy/google');
-
-
+const googleSetup = require('./passport_strategy/google');
 
 app.use(cors(corsMiddleware));
 
@@ -18,5 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 
 var indexRouter = require('./routes/index');
 app.use('/api', indexRouter);
+
+app.listen(process.env.PORT || 3001, function () {
+    console.log(`Listening on port ${process.env.PORT || 3001}`);
+});
 
 module.exports = app;
