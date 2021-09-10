@@ -1,8 +1,6 @@
-const UserModel = require( '../models/users');
-const UserService = require('./UserService');
 const crypto = require('crypto');
 
-class AuthService {
+class HashService {
 
     generateHash(password){
         const salt = password !== null ? crypto.randomBytes(60).toString('base64') : null;
@@ -26,4 +24,4 @@ class AuthService {
 
 }
 
-module.exports = AuthService
+module.exports = HashService

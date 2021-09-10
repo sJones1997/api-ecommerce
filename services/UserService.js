@@ -1,10 +1,10 @@
-const AuthService = require('./AuthService');
+const HashService = require('./HashService');
 const UserModel = require('../models').Users;
 
 class UserService {
 
     async createUser(userDetails) {
-        const auth = new AuthService();
+        const auth = new HashService();
         const {hash, salt} = auth.generateHash(userDetails.password);
         const newUser = await UserModel.create({username: userDetails.username, password: hash, salt: salt, local_account: userDetails.local_account});   
         return newUser.id;        
@@ -29,7 +29,7 @@ class UserService {
 
     async updateUser(newUserObj, savedUserObj){
         let updatedObj = {}
-        const auth = new AuthService();
+        const auth = new HashService();
         const {hash} = await auth.getUserHash(newUserObj.password, savedUserObj.salt); 
 
         if(savedUserObj.username !== newUserObj.username){

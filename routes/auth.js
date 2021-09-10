@@ -12,5 +12,5 @@ authRouter.get('/google', passport.authenticate('google', {
 }));
 
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res, next) => {
-    res.send("you have reached the callback URI");
+    console.log("you have reached the callback URI");
 });
