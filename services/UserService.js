@@ -1,35 +1,58 @@
-const AuthService = require('./AuthService');
+const HashService = require('./HashService');
 const UserModel = require('../models').Users;
 
 class UserService {
 
     async createUser(userDetails) {
-        const auth = new AuthService();
+        const auth = new HashService();
         const {hash, salt} = auth.generateHash(userDetails.password);
-        const newUser = await UserModel.create({username: userDetails.username, password: hash, salt: salt, local_account: userDetails.local_account});   
-        return newUser.id;        
+        return await UserModel.create({
+            username: userDetails.username, 
+            password: hash, 
+            salt: salt, 
+            local_account: userDetails.local_account
+        })
+        .then(data => {
+            return data.toJSON();
+        })
+        .catch(err => {
+            console.log(err)
+        });   
     }
 
     async getAllUsers(){
-        const users = await UserModel.findAll({
-            attributes: ['username']
+        return await UserModel.findAll({
+            attributes: ['username'],
+            raw: true,            
+            plain: true            
+        })
+        .then(data => {
+            return data.toJSON();
+        })
+        .catch(err => {
+            console.log(err)
         });
-
-        return JSON.stringify(users);
     }
 
     async getUserById(id){
-        const user = await UserModel.findAll({
+        await UserModel.findAll({
             where: {
                 id: id
-            }
+            },
+            raw: true,            
+            plain: true
         })
-        return JSON.stringify(user);
+        .then(data => {
+            return data
+        })
+        .catch(err => {
+            console.log(err)
+        });   
     }
 
     async updateUser(newUserObj, savedUserObj){
         let updatedObj = {}
-        const auth = new AuthService();
+        const auth = new HashService();
         const {hash} = await auth.getUserHash(newUserObj.password, savedUserObj.salt); 
 
         if(savedUserObj.username !== newUserObj.username){
@@ -58,7 +81,9 @@ class UserService {
         const deleteUser = await UserModel.destroy({
             where: {
                 id: id
-            }
+            },
+            raw: true,            
+            plain: true
         });
         return deleteUser;
     }
