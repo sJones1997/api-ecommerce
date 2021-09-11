@@ -1,39 +1,44 @@
 
 
+const fs = require('fs');
+const path = require('path');
+const jwt = require('jsonwebtoken');
+
 class JwtService {
 
-    generateJWT(payload, options){
-        const privateKEY = fs.readFileSync('../keys/private.key', 'utf-8');
+    generateJWT(payload){
+        const privateKEY = fs.readFileSync(path.resolve('keys/private.key'), 'utf-8');
     
         const signOptions = {
-            issuer: options.issuer,
-            subject: options.subject,
-            audience: options.audience,
+            issuer: 'Sean Jones Portfolio',
+            subject: payload.username,
+            audience: 'http://localhost:3000',
             expiresIn: '24h',
             algorithm:  "RS256"
         };
     
         const token = jwt.sign(payload, privateKEY, signOptions);  
-        return `Token - ${token}`
+        return token;
     }
 
 
     verifyJWT(token, options){
-        const publicKEY = fs.readFileSync('../keys/public.key', 'utf-8'); 
+        const publicKEY = fs.readFileSync(path.resolve('keys/public.key'), 'utf-8');
     
         const signOptions = {
-            issuer: options.issuer,
+            issuer: 'Sean Jones Portfolio',
             subject: options.subject,
-            audience: options.audience,
+            audience: 'http://localhost:3000',
             expiresIn: '24h',
             algorithm:  ["RS256"]
         };
     
-        try {
-            return jwt.verify(token, publicKEY, signOptions);
-        } catch (err){
-            return false;
-        }
+        jwt.verify(token, publicKEY, signOptions, (err, data) => {
+            if(err){
+                return false;
+            }
+            return data
+        });
     
     
     }    
@@ -41,3 +46,5 @@ class JwtService {
 
 
 }
+
+module.exports = JwtService;
