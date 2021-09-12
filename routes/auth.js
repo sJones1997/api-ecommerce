@@ -8,7 +8,8 @@ authRouter.use(authMiddleware);
 
 
 authRouter.get('/logout', (req, res, next) => {
-
+    res.clearCookie('token');
+    res.status(200).json({'message': 'Logout', 'status': 1});
 });
 
 authRouter.post('/', async (req, res, next) => {
@@ -27,7 +28,8 @@ authRouter.post('/login', async(req, res, next) => {
     const user = await authService.loginUser(req.headers.authorization);
     if(user.status !== 0){
         const token = req.body.jwtService.generateJWT(user);
-        res.cookie('token', token, {httpOnly: true, sameSite: true});
+        res.cookie('token', token, {httpOnly: true});
+        console.log(res.cookie('token'));
         return res.status(200).json({'status': 1, 'message': 'Login successful'})
     }
     return res.status(500).json(user)
