@@ -17,7 +17,7 @@ class JwtService {
         };
     
         const token = jwt.sign(payload, privateKEY, signOptions);  
-        return token;
+        return `Bearer ${token}`;
     }
 
 

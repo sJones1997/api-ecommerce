@@ -16,7 +16,7 @@ authRouter.post('/', async (req, res, next) => {
     const userCreated = await authService.registerUser(req.headers.authorization);
     if(userCreated.status !== 0){
         const token = req.body.jwtService.generateJWT(userCreated);
-        res.cookie('token', token, {httpOnly: true});
+        res.cookie('token', token, {httpOnly: true, sameSite: true});
         return res.status(200).json({'message': 'User created', 'status': 1})
     }
     return res.status(500).json(userCreated)
@@ -27,7 +27,7 @@ authRouter.post('/login', async(req, res, next) => {
     const user = await authService.loginUser(req.headers.authorization);
     if(user.status !== 0){
         const token = req.body.jwtService.generateJWT(user);
-        res.cookie('token', token, {httpOnly: true});
+        res.cookie('token', token, {httpOnly: true, sameSite: true});
         return res.status(200).json({'status': 1, 'message': 'Login successful'})
     }
     return res.status(500).json(user)
@@ -40,6 +40,6 @@ authRouter.get('/google', passport.authenticate('google', {
 
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res, next) => {
     const token = req.body.jwtService.generateJWT({id: req.user.id, username: req.user.username});    
-    res.cookie('token', token, {httpOnly: true});
-    return res.status(200).redirect('http://localhost:3000/login')
+    res.cookie('token', token, {httpOnly: true, sameSite: true});
+    return res.status(200).redirect('http://localhost:3000/')
 });

@@ -4,7 +4,7 @@ const corsOrigin = (req, callback) => {
     const origin = req.headers.origin;
     let corsOptions;
     if(allowedOrigins.includes(origin)){    
-        corsOptions = {origin: true, methods: ['GET', 'PUT', 'POST', 'DELETE'], allowedHeaders: ['Content-Type', 'authorization'] }
+        corsOptions = {origin: true, methods: ['GET', 'PUT', 'POST', 'DELETE'], allowedHeaders: ['Content-Type', 'authorization'], credentials: true }
     } else {
         corsOptions = {origin: false}
     }
