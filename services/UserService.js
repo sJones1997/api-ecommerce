@@ -16,7 +16,7 @@ class UserService {
             return data.toJSON();
         })
         .catch(err => {
-            console.log(err)
+            return err.errors[0].validatorKey === 'not_unique' ? 'A user with this name already exists' : err.errors[0].validatorKey.message
         });   
     }
 
@@ -48,6 +48,25 @@ class UserService {
         .catch(err => {
             console.log(err)
         });   
+    }
+
+    async getUserByName(username){
+        return await UserModel.findAll({
+            where: {
+                username: username
+            },
+            raw: true,
+            plain: true
+        })
+        .then(data => {
+            if(data){
+                return data;
+            }
+            return false;
+        })
+        .catch(err => {
+            return false;
+        });
     }
 
     async updateUser(newUserObj, savedUserObj){

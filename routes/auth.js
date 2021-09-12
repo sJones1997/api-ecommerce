@@ -1,21 +1,45 @@
 const express = require('express');
 const authRouter = express.Router();
 const passport = require('passport');
+const authMiddleware = require('../middlewares/authMiddleware');
 module.exports = authRouter;
-const JwtService = require('../services/JwtService');
+
+authRouter.use(authMiddleware);
+
+
 authRouter.get('/logout', (req, res, next) => {
 
 });
+
+authRouter.post('/', async (req, res, next) => {
+    const authService = req.body.authService;
+    const userCreated = await authService.registerUser(req.headers.authorization);
+    if(userCreated.status !== 0){
+        const token = req.body.jwtService.generateJWT(userCreated);
+        res.cookie('token', token, {httpOnly: true});
+        return res.status(200).json({'message': 'User created', 'status': 1})
+    }
+    return res.status(500).json(userCreated)
+});
+
+authRouter.post('/login', async(req, res, next) => {
+    const authService = req.body.authService;
+    const user = await authService.loginUser(req.headers.authorization);
+    if(user.status !== 0){
+        const token = req.body.jwtService.generateJWT(user);
+        res.cookie('token', token, {httpOnly: true});
+        return res.status(200).json({'status': 1, 'message': 'Login successful'})
+    }
+    return res.status(500).json(user)
+})
 
 authRouter.get('/google', passport.authenticate('google', {
     scope: ['profile']
 }));
 
+
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res, next) => {
-    const jwtService = new JwtService();
-    const token = jwtService.generateJWT({id: req.user.id, username: req.user.username});
-    req.user = null;
-    req.headers.authorization = `Bearer ${token}`;
-    console.log(req.headers)
-    res.send("you have reached the callback URI");
+    const token = req.body.jwtService.generateJWT({id: req.user.id, username: req.user.username});    
+    res.cookie('token', token, {httpOnly: true});
+    return res.status(200).redirect('http://localhost:3000/login')
 });

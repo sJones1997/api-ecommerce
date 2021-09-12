@@ -8,7 +8,6 @@ class JwtService {
 
     generateJWT(payload){
         const privateKEY = fs.readFileSync(path.resolve('keys/private.key'), 'utf-8');
-    
         const signOptions = {
             issuer: 'Sean Jones Portfolio',
             subject: payload.username,

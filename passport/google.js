@@ -2,19 +2,19 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const UserService = require('../services/UserService');
 const UserProviderService = require('../services/UserProvider');
-const JwtService = require('../services/JwtService');
+// const JwtService = require('../services/JwtService');
 
 passport.serializeUser((user, done) => {
     done(null, user);
 })
 
 passport.deserializeUser(async (id, done) => {
-    const userService = new UserService();
-    const jwtService = new JwtService();
-    await userService.getUserById(id)
-    .then(data => {
-        jwtService.verifyJWT()
-    })
+    // const userService = new UserService();
+    // const jwtService = new JwtService();
+    // await userService.getUserById(id)
+    // .then(data => {
+    //     jwtService.verifyJWT()
+    // })
 })
 
 passport.use(new GoogleStrategy({
@@ -30,7 +30,6 @@ passport.use(new GoogleStrategy({
             googleUser = data
         })
         if(googleUser){
-            console.log(googleUser);
             await userService.getUserById(googleUser.user_id)
             .then(data => {
                 done(null, data)

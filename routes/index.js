@@ -3,7 +3,7 @@ const indexRouter = express.Router();
 const jwtMiddleware = require('../middlewares/jwtMiddleware');
 
 const userRouter = require('./users');
-indexRouter.use('/users', userRouter);
+indexRouter.use('/users', jwtMiddleware, userRouter);
 
 const authRouter = require('./auth');
 indexRouter.use('/auth', authRouter);
