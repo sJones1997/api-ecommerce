@@ -6,8 +6,8 @@ module.exports = authRouter;
 
 authRouter.use(authMiddleware);
 
-
 authRouter.get('/logout', (req, res, next) => {
+    req.logout();
     res.clearCookie('token');
     res.status(200).json({'message': 'Logout', 'status': 1});
 });
@@ -52,5 +52,5 @@ authRouter.get('/google', passport.authenticate('google', {
 authRouter.get('/google/redirect', passport.authenticate('google'), (req, res, next) => {
     const token = req.body.jwtService.generateJWT({id: req.user.id, username: req.user.username});    
     res.cookie('token', token, {httpOnly: true, sameSite: true});
-    return res.status(200).redirect('http://localhost:3000/')
+    return res.status(200).redirect('http://localhost:3000/home')
 });
