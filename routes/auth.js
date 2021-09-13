@@ -12,6 +12,16 @@ authRouter.get('/logout', (req, res, next) => {
     res.status(200).json({'message': 'Logout', 'status': 1});
 });
 
+authRouter.get('/verify', (req, res, next) => {
+    if(req.cookies.token){
+        const valid = req.body.jwtService.verifyJWT(req.cookies.token);  
+        if(valid){
+            return res.status(200).json({'message': 'User already signed in', 'status': 1});  
+        }           
+    }
+    return res.status(200).json({'message': 'Sign in required', 'status': 0})       
+})
+
 authRouter.post('/', async (req, res, next) => {
     const authService = req.body.authService;
     const userCreated = await authService.registerUser(req.headers.authorization);
@@ -28,8 +38,7 @@ authRouter.post('/login', async(req, res, next) => {
     const user = await authService.loginUser(req.headers.authorization);
     if(user.status !== 0){
         const token = req.body.jwtService.generateJWT(user);
-        res.cookie('token', token, {httpOnly: true});
-        console.log(res.cookie('token'));
+        res.cookie('token', token, {httpOnly: true, sameSite: true});
         return res.status(200).json({'status': 1, 'message': 'Login successful'})
     }
     return res.status(500).json(user)
