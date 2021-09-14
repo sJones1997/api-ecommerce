@@ -35,7 +35,7 @@ class UserService {
     }
 
     async getUserById(id){
-        await UserModel.findAll({
+        return await UserModel.findAll({
             where: {
                 id: id
             },

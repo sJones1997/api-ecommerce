@@ -5,6 +5,7 @@ const UserProviderService = require('../services/UserProvider');
 // const JwtService = require('../services/JwtService');
 
 passport.serializeUser((user, done) => {
+    console.log(user)
     done(null, user);
 })
 
