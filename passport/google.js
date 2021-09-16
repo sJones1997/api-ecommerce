@@ -25,10 +25,9 @@ passport.use(new GoogleStrategy({
     }, async (accessToken, refreshToken, profile, done) => {
         const userService = new UserService();
         const userProviderService = new UserProviderService();
-        let googleUser;
-        await userProviderService.getUserProvider(profile.id)
+        const googleUser = await userProviderService.getUserProvider(profile.id)
         .then(data => {
-            googleUser = data
+            return data
         })
         if(googleUser){
             await userService.getUserById(googleUser.user_id)

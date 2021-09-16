@@ -25,6 +25,7 @@ class UserProviderService {
             plain: true               
         })
         .then(data => {
+            console.log(data)
             if(data){
                 return data;
             }
