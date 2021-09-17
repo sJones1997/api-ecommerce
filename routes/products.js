@@ -31,10 +31,11 @@ productRouter.post('/', async (req, res, next) => {
 productRouter.get('/', async (req, res, next) => {
     const productService = req.body.productService;
     const products = await productService.getAllProducts();
-    if(products.length){
-      return res.status(200).send(products);
+    console.log(products)
+    if(products){
+      return res.status(200).json({'message': products, 'status': 1});
     }
-    return res.status(500).send('Unable to find products!')
+    return res.status(500).json({'message': 'Unable to find products!', 'status': 0})
 });
 
 productRouter.get('/:productId', async (req, res, next) => {
