@@ -11,7 +11,6 @@ class ProductService {
             stock: stock
         })
         .then(data => {
-            console.log(data)
             if(data){
                 return data.toJSON();
             }
@@ -24,7 +23,7 @@ class ProductService {
 
     async getAllProducts(){
         return await ProductModel.findAll({
-            attributes: ['name', 'description', 'price', 'stock'],
+            attributes: ['id','name', 'description', 'price', 'stock'],
             raw:true
         })
         .then(data => {
@@ -38,12 +37,14 @@ class ProductService {
     async getProductById(id){
         return await ProductModel.findAll({
             attributes: ['name', 'description', 'price', 'stock'],
+            raw: true,            
+            plain: true,            
             where: {
                 id: parseInt(id)
             }
         })
         .then(data => {
-            return data.toJSON();
+            return data;
         })
         .catch(err => {
             console.log(err)

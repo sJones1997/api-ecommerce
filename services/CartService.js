@@ -2,15 +2,39 @@ const CartModel = require('../models').Carts;
 class CartService {
 
     async createCart(userId){
-        const insertItem = await CartModel.create({
+        return await CartModel.create({
             user_id: userId
-        });
-        return insertItem.id;
+        })
+        .then(data => {
+            return data.toJSON();
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     async getAllCarts(){
         const allCarts = await CartModel.findAll();
         return JSON.stringify(allCarts);
+    }
+
+    async getUserCart(userId){
+        return await CartModel.findAll({
+            plain: true, 
+            raw: true,
+            where:{
+                user_id: userId
+            }
+        })
+        .then(data => {
+            if(data){
+                return data;
+            }
+            return false;
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     async getCartById(cartId){

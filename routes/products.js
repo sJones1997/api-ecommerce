@@ -7,11 +7,10 @@ productRouter.use(productMiddleware);
 
 productRouter.param('productId', async (req, res, next, id) => {
     const productService = req.body.productService;
-    let product = await productService.getProductById(id);
-    product = JSON.parse(product);
-    if(product.length){
+    const product = await productService.getProductById(id);
+    if(product){
       req.body.productId = parseInt(id)
-      req.body.productStored = product[0];
+      req.body.productStored = product;
       return next();
     } 
     return res.status(404).send('Product not found');
@@ -31,7 +30,6 @@ productRouter.post('/', async (req, res, next) => {
 productRouter.get('/', async (req, res, next) => {
     const productService = req.body.productService;
     const products = await productService.getAllProducts();
-    console.log(products)
     if(products){
       return res.status(200).json({'message': products, 'status': 1});
     }
@@ -39,7 +37,10 @@ productRouter.get('/', async (req, res, next) => {
 });
 
 productRouter.get('/:productId', async (req, res, next) => {
-    res.status(200).send(req.body.productStored);
+  if(req.body.productStored){
+    return res.status(200).json({message: req.body.productStored, status: 1});
+  }
+  return res.status(500).json({message: 'Problem fetching product', status: 0});
 })
 
 productRouter.put('/:productId', async (req, res, next) => {

@@ -6,7 +6,7 @@ const jwtMiddleware = (req, res, next) => {
         const jwtService = new JwtService();
         const cookie = jwtService.verifyJWT(token);
         if(cookie){
-            req.cookie = cookie;
+            req.verifiedUserId = cookie.id;
             return next();
         }
         return res.status(403).json({'message': 'Unauthorised user', 'status': 0});        
