@@ -1,9 +1,17 @@
 const express = require('express');
-const cartRouter = express.Router();
+const cartRouter = express.Router({strict: true});
 const cartMiddleware = require('../middlewares/cartMiddleware');
 module.exports = cartRouter;
 
 cartRouter.use(cartMiddleware);
+
+cartRouter.get('/userCart', async (req, res, next) => {
+    const cart = await req.body.cartService.getUserCart(req.verifiedUserId)
+    if(cart){
+        return res.status(200).json({"message": cart.id, "status": 1})
+    }
+    return res.status(404).json({"message": "Unable to find cart", "status": 0})
+})
 
 cartRouter.param('cartId', async (req, res, next, id) => {
     const cartService = req.body.cartService;
@@ -48,6 +56,14 @@ cartRouter.delete("/:cartId", async (req, res, next) => {
     return res.status(500).send("Problem deleting cart");
 })
 
+cartRouter.get("/cartItems/:cartId", async (req, res, next) => {
+    const cartItems = await req.body.cartService.getAllCartItems(req.body.cartId);
+    if(cartItems){
+        return res.status(200).json({'message': cartItems, 'status': 1})
+    } 
+    res.status(200).json({'message': cartItems, 'status': 1})
+    
+})
 
 cartRouter.param('cartItemId', async (req, res, next, id) => {
     const productCartService = req.body.productCartService;
@@ -62,13 +78,14 @@ cartRouter.param('cartItemId', async (req, res, next, id) => {
 });
 
 
+
 cartRouter.post("/cartItem", async(req, res, next) => {
-    const productCartService = req.body.productCartService;
-    const newCartItem = await productCartService.addCartItem(req.body.cartId, req.body.productId);
-    if(newCartItem){
-        return res.status(200).send("Item added!");
+    const cart = await req.body.cartService.getUserCart(req.verifiedUserId)
+    const newCartItems = await req.body.productCartService.insertCartItems(cart.id, req.body.productId, req.body.orderQuantity);
+    if(newCartItems){
+        return res.status(200).json({'message': "Item(s) added!", 'status': 1});
     }
-    return res.status(404).send("Problem adding cart item");
+    return res.status(500).json({'message': "Problem adding item(s)", 'status': 0});
 })
 
 cartRouter.get("/cartItem/:cartItemId", (req, res, next) => {

@@ -15,6 +15,8 @@ app.use(cookieParser());
 
 app.use(passport.initialize());
 
+const stripe = require('stripe')(process.env.STRIPE_KEY);
+
 var indexRouter = require('./routes/index');
 app.use('/api', indexRouter);
 

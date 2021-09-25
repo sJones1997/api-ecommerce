@@ -36,7 +36,7 @@ class JwtService {
             if(err){
                 return false;
             }
-            return true
+            return data;
         });
     
     

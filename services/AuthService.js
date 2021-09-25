@@ -1,15 +1,18 @@
 const HashService = require('../services/HashService');
 const UserService = require('../services/UserService');
+const CartService = require('../services/CartService');
 
 class AuthService {
 
     async registerUser(userDetails){
-        const detailsSplit = this.decodeUserDetails(userDetails);
+        let detailsSplit = this.decodeUserDetails(userDetails);
+        detailsSplit[0] = detailsSplit[0].toLowerCase();
         if(detailsSplit[1] !== detailsSplit[2]){
             return {'status': 0, 'message': 'passwords do not match'};
         }
-        const userService = new UserService();        
-        return await userService.createUser({username: detailsSplit[0], password: detailsSplit[1]})
+        const userService = new UserService();   
+        const cartService = new CartService();     
+        const user = await userService.createUser({username: detailsSplit[0], password: detailsSplit[1]})
         .then(data => {
             if(typeof(data) !== 'string'){
                 return data
@@ -19,12 +22,26 @@ class AuthService {
         .catch(err => {
             return {'message': err, 'status': 0} 
         })    
+        const cartCreated = await cartService.createCart(user.id)
+        .then(data => {
+            if(data){
+                return true;
+            }
+            return false;
+        }) 
+        .catch(err => {
+            return false;
+        })
+        if(cartCreated){
+            return user;
+        }
+        return {'message': 'Problem creating cart', 'status': 0} 
     }
 
     async loginUser(userDetails){
         const detailsSplit = this.decodeUserDetails(userDetails);
+        detailsSplit[0] = detailsSplit[0].toLowerCase();
         const userService = new UserService()
-
         const user = await userService.getUserByName(detailsSplit[0])
         .then(data => {
             return data;
@@ -46,7 +63,6 @@ class AuthService {
             .catch(err => {
                 console.log(err)
             })
-
             return confirmUserPassword;
 
         } else {

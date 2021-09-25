@@ -4,39 +4,66 @@ class ProductService {
 
     async createProduct(product){
         const {name, description, price, stock} = product;
-        const newProduct = await ProductModel.create({
+        return await ProductModel.create({
             name: name,
             description: description,
             price: price,
             stock: stock
-        });
-
-        return newProduct.id;
+        })
+        .then(data => {
+            if(data){
+                return data.toJSON();
+            }
+            return false;
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     async getAllProducts(){
-        const products = await ProductModel.findAll();
-        return JSON.stringify(products);
+        return await ProductModel.findAll({
+            attributes: ['id','name', 'description', 'price', 'stock'],
+            raw:true
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     async getProductById(id){
-        const product = await ProductModel.findAll({
+        return await ProductModel.findAll({
             attributes: ['name', 'description', 'price', 'stock'],
+            raw: true,            
+            plain: true,            
             where: {
                 id: parseInt(id)
             }
-        });
-        return JSON.stringify(product);
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     async updateProduct(id, product){
         const {name, description, price, stock} = product
-        const updatedProduct = await ProductModel.update({name:name, description: description, price:price, stock: stock}, {
+        await ProductModel.update({name:name, description: description, price:price, stock: stock}, {
             where:{
                 id: id
             }
-        });
-        return updatedProduct;
+        })
+        .then(data => {
+            return data.toJSON();
+        })
+        .catch(err => {
+            console.log(err)
+        })        
     }
 
     async deleteProduct(id){

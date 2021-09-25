@@ -17,4 +17,7 @@ indexRouter.use('/cart', jwtMiddleware, cartRouter);
 const orderRouter = require('./order');
 indexRouter.use('/order', jwtMiddleware, orderRouter);
 
+const checkoutRouter = require('./checkout');
+indexRouter.use('/checkout', jwtMiddleware, checkoutRouter);
+
 module.exports = indexRouter;

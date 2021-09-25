@@ -2,10 +2,10 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const UserService = require('../services/UserService');
 const UserProviderService = require('../services/UserProvider');
+const CartService = require('../services/CartService');
 // const JwtService = require('../services/JwtService');
 
 passport.serializeUser((user, done) => {
-    console.log(user)
     done(null, user);
 })
 
@@ -25,10 +25,10 @@ passport.use(new GoogleStrategy({
     }, async (accessToken, refreshToken, profile, done) => {
         const userService = new UserService();
         const userProviderService = new UserProviderService();
-        let googleUser;
-        await userProviderService.getUserProvider(profile.id)
+        const cartService = new CartService();
+        const googleUser = await userProviderService.getUserProvider(profile.id)
         .then(data => {
-            googleUser = data
+            return data
         })
         if(googleUser){
             await userService.getUserById(googleUser.user_id)
@@ -36,8 +36,39 @@ passport.use(new GoogleStrategy({
                 done(null, data)
             });
         } else {
-            const user = await userService.createUser({username: profile.displayName, password: null, local_account: 0});
-            await userProviderService.createUserProvider({userId: user.id, profileProviderId: 1, providerId: profile.id});
+            const user = await userService.createUser({username: profile.displayName, password: null, local_account: 0})
+            .then(data => {
+                if(data){
+                    return data;
+                }
+                return false;
+            })
+            .catch(err => {
+                console.log(err)
+                return;
+            })
+            await userProviderService.createUserProvider({userId: user.id, profileProviderId: 1, providerId: profile.id})
+            .then(data => {
+                if(data){
+                    return data;
+                }
+                return false;
+            })
+            .catch(err => {
+                console.log(err)
+                return;
+            })
+            await cartService.createCart(user.id)
+            .then(data => {
+                if(data){
+                    return data;
+                }
+                return false;
+            })
+            .catch(err => {
+                console.log(err)
+                return;
+            })            
             done(null, user);           
         }
     })

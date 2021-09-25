@@ -2,6 +2,7 @@ const express = require('express');
 const authRouter = express.Router();
 const passport = require('passport');
 const authMiddleware = require('../middlewares/authMiddleware');
+const CartService = require('../services/CartService');
 module.exports = authRouter;
 
 authRouter.use(authMiddleware);
