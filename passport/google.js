@@ -30,7 +30,6 @@ passport.use(new GoogleStrategy({
         .then(data => {
             return data
         })
-        console.log(googleUser)
         if(googleUser){
             await userService.getUserById(googleUser.user_id)
             .then(data => {

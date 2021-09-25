@@ -57,7 +57,12 @@ cartRouter.delete("/:cartId", async (req, res, next) => {
 })
 
 cartRouter.get("/cartItems/:cartId", async (req, res, next) => {
-    const cartItems = await req.body.productCartService.getAllCartItems(req.body.cartId);
+    const cartItems = await req.body.cartService.getAllCartItems(req.body.cartId);
+    if(cartItems){
+        return res.status(200).json({'message': cartItems, 'status': 1})
+    } 
+    res.status(200).json({'message': cartItems, 'status': 1})
+    
 })
 
 cartRouter.param('cartItemId', async (req, res, next, id) => {
@@ -76,9 +81,8 @@ cartRouter.param('cartItemId', async (req, res, next, id) => {
 
 cartRouter.post("/cartItem", async(req, res, next) => {
     const cart = await req.body.cartService.getUserCart(req.verifiedUserId)
-    const productCartService = req.body.productCartService;
-    const newCartItem = await productCartService.addCartItem(cart.id, req.body.productId, req.body.orderQuantity);
-    if(newCartItem){
+    const newCartItems = await req.body.productCartService.insertCartItems(cart.id, req.body.productId, req.body.orderQuantity);
+    if(newCartItems){
         return res.status(200).json({'message': "Item(s) added!", 'status': 1});
     }
     return res.status(500).json({'message': "Problem adding item(s)", 'status': 0});

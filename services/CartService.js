@@ -1,4 +1,7 @@
 const CartModel = require('../models').Carts;
+const Products = require('../models').Products;
+const sequelize = require('sequelize')
+
 class CartService {
 
     async createCart(userId){
@@ -46,6 +49,34 @@ class CartService {
         return JSON.stringify(cart);
     }
 
+    async getAllCartItems(cartId){
+        return await CartModel.findAll({
+            attributes: [[sequelize.fn('count', 'Products.id'), 'quantity'], 'Products.id',  'Products.name', 'Products.description', [sequelize.fn('sum', sequelize.col('Products.price')), 'totalProductPrice'], 'Products.price'],
+            raw: true,          
+            include: [{
+                model: Products,
+                as: 'Products',
+                require: true,
+                attributes: [],
+                through: {attributes:[]}
+            }],
+            where:{
+                id: cartId
+            },
+            group: ['Products.id', 'Products.name', 'Products.description', 'Products.price']
+        })
+        .then(data => {
+            if(data[0].id !== null){
+                return data;
+            }
+            return false;
+        })
+        .catch(err => {
+            console.log(err);
+            return false;
+        })
+    }    
+
     async deleteCart(cartId){
         const deleteCart = await CartModel.destroy({
             where: {
@@ -54,9 +85,6 @@ class CartService {
         });
         return deleteCart;
     }
-
-
-
 }
 
 module.exports = CartService;

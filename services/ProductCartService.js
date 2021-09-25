@@ -1,33 +1,31 @@
 const ProductCartModel = require('../models').Products_Cart;
-const Products = require('../models').Products;
+
 class ProductsCartsService {
 
-    async addCartItem(cartId, productId, quantity){
-        let itemsAdded = true;
+    async addCartItem(cartId, productId){
+        
+        return await ProductCartModel.create({
+            cart_id: cartId, 
+            product_id: productId            
+        })
+        .then(data => {
+            if(data){
+                return true;
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            return false;
+        })        
+    }
+
+    async insertCartItems(cartId, productId, quantity){
+        let inserted = false;
         while(quantity > 0){
-            if(itemsAdded === false){
-                quantity = 0
-            }            
-            await ProductCartModel.create({
-                cart_id: cartId, 
-                product_id: productId
-            })
-            .then(data => {
-                if(data){
-                    quantity--;
-                    return;
-                }
-            })
-            .catch(err => {
-                quantity = 0;
-                itemsAdded = false
-                return;
-            })
+            inserted = await this.addCartItem(cartId, productId);
+            quantity--
         }
-        if(itemsAdded){
-            return true;
-        }
-        return false;
+        return inserted;
     }
 
     async getCartItem(cartItemId){
@@ -39,17 +37,6 @@ class ProductsCartsService {
         return JSON.stringify(getCartItem);
     }
 
-    async getAllCartItems(cartId){
-        return await ProductCartModel.findAll({
-            includ: [{
-                model: Products
-            }],
-            where:{
-                cart_id: cartId
-            }
-        })
-    }
-
     async deleteCartItem(cartItemId){
         const deleteCartItem = await ProductCartModel.destroy({
             where: {
@@ -57,6 +44,24 @@ class ProductsCartsService {
             }
         });
         return JSON.stringify(deleteCartItem);
+    }
+
+    async deleteAllCartItems(cartId){
+        return await ProductCartModel.destroy({
+            where: {
+                cart_id: cartId            
+            }
+        })
+        .then(data => {
+            if(data){
+                return true
+            }
+            return false;
+        })
+        .catch(err => {
+            console.log(err);
+            return false;
+        })
     }
 
 
