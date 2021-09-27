@@ -3,7 +3,6 @@ const ProductCartModel = require('../models').Products_Cart;
 class ProductsCartsService {
 
     async addCartItem(cartId, productId){
-        
         return await ProductCartModel.create({
             cart_id: cartId, 
             product_id: productId            
@@ -12,6 +11,7 @@ class ProductsCartsService {
             if(data){
                 return true;
             }
+            return false;
         })
         .catch(err => {
             console.log(err)
@@ -28,22 +28,78 @@ class ProductsCartsService {
         return inserted;
     }
 
-    async getCartItem(cartItemId){
-        const getCartItem = await ProductCartModel.findAll({
+    async getCartItemId(cartId, productId){
+        return await ProductCartModel.findAll({
+            attributes: ['id'],
+            raw: true, 
             where: {
-                id: cartItemId
+                cart_id: cartId,
+                product_id: productId
+            },
+            limit: 1
+        })
+        .then(data => {
+            if(data){
+                return data[0].id
             }
-        });
-        return JSON.stringify(getCartItem);
+        })
+        .catch(err => {
+            console.log(data)
+        })
     }
 
-    async deleteCartItem(cartItemId){
-        const deleteCartItem = await ProductCartModel.destroy({
+    async deleteCartItemById(itemId){
+        return await ProductCartModel.destroy({
             where: {
-                id: cartItemId
+                id: itemId
             }
-        });
-        return JSON.stringify(deleteCartItem);
+        })
+        .then(data => {
+            if(data){
+                return true;
+            }
+            return false;
+        })
+        .catch(err => {
+            return false;
+        })
+    }
+
+    async updateCartItems(currentCartItems, updatedItems, cartId){
+        console.log(updatedItems)
+        const difference = updatedItems.map(e => {
+            return currentCartItems.find(el => {
+                if(el.id === e.id){
+                    return el['difference'] = e.quantity - el.quantity;
+                }
+            })
+        })
+         
+         let resultArray =difference.map(async e => {
+            if(e !== undefined){            
+                let result = false;                
+                if(e.difference > 0){
+                    while(e.difference > 0){
+                        result = await this.addCartItem(cartId, e.id)
+                        e.difference--                        
+                    }
+                    return result;
+                } else if (e.difference < 0){
+                    while(e.difference < 0){
+                        let cartItemId = await this.getCartItemId(cartId, e.id);
+                        result = await this.deleteCartItemById(cartItemId);
+                        e.difference++                       
+                    }
+                    return result;                    
+                }                       
+            } else {
+                return {'status': 1, 'message' : 'Nothing to update'}
+            }    
+        })
+        return Promise.all(resultArray)
+        .then(data => {
+            return data
+        })
     }
 
     async deleteAllCartItems(cartId){

@@ -75,24 +75,6 @@ class OrderService {
             return false;
         })
     }
-
-    async getOrderById(orderId){
-        const order = await OrderModel.findAll({
-            where: {
-                id: orderId
-            }
-        });
-        return JSON.stringify(order);
-    }
-
-    async deleteOrder(orderId){
-        const deleteOrder = await OrderModel.destroy({
-            where: {
-                id: orderId
-            }
-        });
-        return deleteOrder;
-    } 
 }
 
 module.exports = OrderService

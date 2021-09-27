@@ -16,16 +16,16 @@ productRouter.param('productId', async (req, res, next, id) => {
     return res.status(404).send('Product not found');
 })
 
-//Create new Product
-productRouter.post('/', async (req, res, next) => {
-    req.body.name = req.body.name.toLowerCase();
-    const productService = req.body.productService;
-    const newProduct = await productService.createProduct(req.body);
-    if(isNaN(newProduct) === false){
-      return res.status(200).send('Product created!');
-    }
-    return res.status(500).send('Problem creating Product!');
-});
+// //Create new Product
+// productRouter.post('/', async (req, res, next) => {
+//     req.body.name = req.body.name.toLowerCase();
+//     const productService = req.body.productService;
+//     const newProduct = await productService.createProduct(req.body);
+//     if(isNaN(newProduct) === false){
+//       return res.status(200).send('Product created!');
+//     }
+//     return res.status(500).send('Problem creating Product!');
+// });
   
 productRouter.get('/', async (req, res, next) => {
     const productService = req.body.productService;
@@ -43,19 +43,12 @@ productRouter.get('/:productId', async (req, res, next) => {
   return res.status(500).json({message: 'Problem fetching product', status: 0});
 })
 
-productRouter.put('/:productId', async (req, res, next) => {
-    const updatedProduct = await req.body.productService.updateProduct(req.body.productId, req.body);
-    if(updatedProduct) {
-      return res.status(200).send('Details updated successfully');
-    }
-    return res.status(400).send("Nothing to update");
-})
 
-productRouter.delete('/:productId', async (req, res, next) => {
-    const productService = req.body.productService;
-    const deleteProduct = await productService.deleteProduct(req.body.productId);
-    if(deleteProduct){
-      return res.status(200).send("Product successfully deleted")
-    }
-    return res.status(500).send('Unable to delete Product')
-  })
+// productRouter.delete('/:productId', async (req, res, next) => {
+//     const productService = req.body.productService;
+//     const deleteProduct = await productService.deleteProduct(req.body.productId);
+//     if(deleteProduct){
+//       return res.status(200).send("Product successfully deleted")
+//     }
+//     return res.status(500).send('Unable to delete Product')
+// })

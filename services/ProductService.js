@@ -66,14 +66,14 @@ class ProductService {
         })        
     }
 
-    async deleteProduct(id){
-        const deleteProduct = await ProductModel.destroy({
-            where: {
-                id: id
-            }
-        });
-        return deleteProduct;
-    }
+    // async deleteProduct(id){
+    //     const deleteProduct = await ProductModel.destroy({
+    //         where: {
+    //             id: id
+    //         }
+    //     });
+    //     return deleteProduct;
+    // }
 }
 
 module.exports = ProductService;
