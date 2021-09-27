@@ -2,9 +2,6 @@ var express = require('express');
 const indexRouter = express.Router();
 const jwtMiddleware = require('../middlewares/jwtMiddleware');
 
-const userRouter = require('./users');
-indexRouter.use('/users', jwtMiddleware, userRouter);
-
 const authRouter = require('./auth');
 indexRouter.use('/auth', authRouter);
 

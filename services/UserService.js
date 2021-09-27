@@ -96,18 +96,6 @@ class UserService {
 
     }
 
-    async deleteUser(id){
-        const deleteUser = await UserModel.destroy({
-            where: {
-                id: id
-            },
-            raw: true,            
-            plain: true
-        });
-        return deleteUser;
-    }
-
-
 }
 
 module.exports = UserService;

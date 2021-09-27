@@ -16,10 +16,10 @@ class CartService {
         })
     }
 
-    async getAllCarts(){
-        const allCarts = await CartModel.findAll();
-        return JSON.stringify(allCarts);
-    }
+    // async getAllCarts(){
+    //     const allCarts = await CartModel.findAll();
+    //     return JSON.stringify(allCarts);
+    // }
 
     async getUserCart(userId){
         return await CartModel.findAll({
@@ -51,7 +51,7 @@ class CartService {
 
     async getAllCartItems(cartId){
         return await CartModel.findAll({
-            attributes: [[sequelize.fn('count', 'Products.id'), 'quantity'], 'Products.id',  'Products.name', 'Products.description', [sequelize.fn('sum', sequelize.col('Products.price')), 'totalProductPrice'], 'Products.price'],
+            attributes: [[sequelize.cast(sequelize.fn('count', 'Products.id'), 'integer'), 'quantity'], 'Products.id',  'Products.name', 'Products.description', [sequelize.fn('sum', sequelize.col('Products.price')), 'totalProductPrice'], 'Products.price'],
             raw: true,          
             include: [{
                 model: Products,

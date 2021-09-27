@@ -16,7 +16,6 @@ class CheckoutService {
             currency: "gbp"
           })
           .then(data => {
-              console.log(data.client_secret)
               return data.client_secret
           })
           .catch(err => {
