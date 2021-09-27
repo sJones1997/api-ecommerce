@@ -11,7 +11,7 @@ class JwtService {
         const signOptions = {
             issuer: 'Sean Jones Portfolio',
             subject: 'test',
-            audience: 'http://localhost:3000',
+            audience: process.env.CLIENT_HOST,
             expiresIn: '24h',
             algorithm:  "RS256"
         };
@@ -27,7 +27,7 @@ class JwtService {
         const signOptions = {
             issuer: 'Sean Jones Portfolio',
             subject: 'test',
-            audience: 'http://localhost:3000',
+            audience: process.env.CLIENT_HOST,
             expiresIn: '24h',
             algorithm:  ["RS256"]
         };

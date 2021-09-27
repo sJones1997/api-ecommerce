@@ -1,6 +1,6 @@
 
 const corsOrigin = (req, callback) => {
-    const allowedOrigins = ['http://localhost:3000','http://127.0.0.1:3000'];
+    const allowedOrigins = [process.env.CLIENT_HOST];
     const origin = req.headers.origin;
     let corsOptions;
     if(allowedOrigins.includes(origin)){    
