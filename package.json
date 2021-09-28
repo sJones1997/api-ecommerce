@@ -1,10 +1,10 @@
 {
-  "name": "api-ecommerce",
-  "version": "0.0.0",
-  "private": true,
   "scripts": {
     "start": "nodemon app.js"
   },
+  "name": "api-ecommerce",
+  "version": "0.0.0",
+  "private": true,
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
