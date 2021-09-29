@@ -40,7 +40,7 @@ authRouter.post('/login', async(req, res, next) => {
     const userResult = await authService.loginUser(req.headers.authorization);
     if(userResult.status !== 0){
         const token = req.body.jwtService.generateJWT(userResult);
-        res.cookie('token', token, {httpOnly: true, sameSite: false, secure: true, domain=''});
+        res.cookie('token', token, {httpOnly: true, sameSite: false, secure: true});
         return res.status(200).json({'status': 1, 'message': 'Login successful'})
     }
     return res.status(500).json(userResult)
