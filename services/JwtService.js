@@ -39,7 +39,6 @@ class JwtService {
                 logger.info('info', {'err': err})
                 return false;
             }
-            winston.log('info', true)
             return data;
         });
     
