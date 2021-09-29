@@ -14,7 +14,9 @@ authRouter.get('/logout', (req, res, next) => {
 
 authRouter.get('/verify', (req, res, next) => {
     if(req.cookies.token){
-        const valid = req.body.jwtService.verifyJWT(req.cookies.token);  
+        console.log(req.cookies.token)
+        const valid = req.body.jwtService.verifyJWT(req.cookies.token);
+        console.log(valid)  
         if(valid){
             return res.status(200).json({'message': 'User already signed in', 'status': 1});  
         }           
