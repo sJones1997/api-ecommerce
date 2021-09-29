@@ -3,12 +3,11 @@ const ProductModel = require('../models').Products;
 class ProductService {
 
     async createProduct(product){
-        const {name, description, price, stock} = product;
+        const {name, description, price} = product;
         return await ProductModel.create({
             name: name,
             description: description,
-            price: price,
-            stock: stock
+            price: price
         })
         .then(data => {
             if(data){
@@ -23,7 +22,7 @@ class ProductService {
 
     async getAllProducts(){
         return await ProductModel.findAll({
-            attributes: ['id','name', 'description', 'price', 'stock'],
+            attributes: ['id','name', 'description', 'price'],
             raw:true
         })
         .then(data => {
@@ -36,7 +35,7 @@ class ProductService {
 
     async getProductById(id){
         return await ProductModel.findAll({
-            attributes: ['name', 'description', 'price', 'stock'],
+            attributes: ['name', 'description', 'price'],
             raw: true,            
             plain: true,            
             where: {
@@ -52,8 +51,8 @@ class ProductService {
     }
 
     async updateProduct(id, product){
-        const {name, description, price, stock} = product
-        await ProductModel.update({name:name, description: description, price:price, stock: stock}, {
+        const {name, description, price} = product
+        await ProductModel.update({name:name, description: description, price:price}, {
             where:{
                 id: id
             }

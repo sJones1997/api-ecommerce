@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const winston = require('winston');
 
 class JwtService {
 
@@ -22,6 +23,7 @@ class JwtService {
 
 
     verifyJWT(token){
+        winston.log('info', token)
         const publicKEY = fs.readFileSync(path.resolve('keys/public.key'), 'utf-8');
     
         const signOptions = {
@@ -34,8 +36,10 @@ class JwtService {
     
         return jwt.verify(token, publicKEY, signOptions, (err, data) => {
             if(err){
+                winston.log('info', err)
                 return false;
             }
+            winston.log('info', true)
             return data;
         });
     
