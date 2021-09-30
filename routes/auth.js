@@ -8,7 +8,7 @@ authRouter.use(authMiddleware);
 
 authRouter.get('/logout', (req, res, next) => {
     req.logout();
-    res.clearCookie('token');
+    res.clearCookie('token', {domain: process.env.DOMAIN}).end()
     res.status(200).json({'message': 'Logout', 'status': 1});
 });
 
