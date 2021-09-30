@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const logger = require('heroku-logger')
 
 class JwtService {
 
@@ -22,6 +23,7 @@ class JwtService {
 
 
     verifyJWT(token){
+
         const publicKEY = fs.readFileSync(path.resolve('keys/public.key'), 'utf-8');
     
         const signOptions = {
