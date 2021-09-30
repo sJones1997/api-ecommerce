@@ -23,7 +23,7 @@ class JwtService {
 
 
     verifyJWT(token){
-        logger.info('info', {'token': token})
+
         const publicKEY = fs.readFileSync(path.resolve('keys/public.key'), 'utf-8');
     
         const signOptions = {
@@ -36,7 +36,6 @@ class JwtService {
     
         return jwt.verify(token, publicKEY, signOptions, (err, data) => {
             if(err){
-                logger.info('info', {'err': err})
                 return false;
             }
             return data;

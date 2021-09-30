@@ -1,6 +1,7 @@
 const JwtService = require('../services/JwtService');
 
 const jwtMiddleware = (req, res, next) => {
+    console.log(req.cookies);
     const token = req.cookies.token;
     if(token){
         const jwtService = new JwtService();
