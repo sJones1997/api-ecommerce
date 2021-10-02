@@ -26,6 +26,7 @@ authRouter.post('/', async (req, res, next) => {
     const authService = req.body.authService;
     const userCreated = await authService.registerUser(req.headers.authorization);
     if(userCreated.status !== 0){
+        console.log(userCreated)
         const token = req.body.jwtService.generateJWT(userCreated);
         res.cookie('token', token, {httpOnly: true, sameSite: true});
         return res.status(200).json({'message': 'User created', 'status': 1})

@@ -7,8 +7,9 @@ class AuthService {
     async registerUser(userDetails){
         let detailsSplit = this.decodeUserDetails(userDetails);
         detailsSplit[0] = detailsSplit[0].toLowerCase();
-        if(detailsSplit[1] !== detailsSplit[2]){
-            return {'status': 0, 'message': 'passwords do not match'};
+        const validate = this.validateCredentials(detailsSplit[0], detailsSplit[1], detailsSplit[2]);
+        if(validate.status === 0){
+            return validate;
         }
         const userService = new UserService();   
         const cartService = new CartService();     
@@ -41,6 +42,10 @@ class AuthService {
     async loginUser(userDetails){
         const detailsSplit = this.decodeUserDetails(userDetails);
         detailsSplit[0] = detailsSplit[0].toLowerCase();
+        const validate = this.validateCredentials(detailsSplit[0], detailsSplit[1]);
+        if(validate.status === 0){
+            return validate;
+        }        
         const userService = new UserService()
         const user = await userService.getUserByName(detailsSplit[0])
         .then(data => {
@@ -74,6 +79,27 @@ class AuthService {
     decodeUserDetails(encodedDetails){
         let decode = Buffer.from(encodedDetails.split(" ")[1], 'base64').toString('utf-8');
         return decode.split(":");
+    }
+
+    validateCredentials(username, password, confirmPassword = null){
+        let errorCount = 0;
+        let errorArray = [];
+        if(username.length < 3){
+            errorCount++;
+            errorArray.push(`username "${username}" not long enough (3 characters required)`);
+        }
+        if(password.length < 8){
+            errorCount++;
+            errorArray.push('password not longer enough (8 characters required)')            
+        }
+        if(confirmPassword !== null && password !== confirmPassword){
+            errorCount++;
+            errorArray.push('passwords do not match');            
+        }
+        if(errorCount){
+            return {'message': errorArray, 'status': 0}
+        }        
+        return {'status': 1}
     }
 
 }
